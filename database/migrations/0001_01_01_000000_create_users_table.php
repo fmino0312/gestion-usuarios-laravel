@@ -19,7 +19,13 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            // 🔹 Solución: Permitir valores nulos o definir un valor por defecto
+            $table->string('phone')->nullable(); // Permite nulo
+            $table->string('address')->nullable(); // Permite nulo
+            $table->string('role')->default('guest'); // Valor por defecto
         });
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

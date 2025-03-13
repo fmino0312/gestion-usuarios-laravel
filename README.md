@@ -1,66 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Proyecto de Autenticación con Laravel Breeze y Sanctum
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto implementa autenticación con **Laravel Breeze** y **Laravel Sanctum**, permitiendo la gestión de usuarios con roles (`admin` y `guest`) y la generación de tokens para autenticación API. Se han agregado dos nuevos campos al modelo `User`: `phone` y `address`.
 
-## About Laravel
+## **Estado del Proyecto**
+### **Lo que ya está implementado**
+- **Autenticación con Laravel Breeze** (manejo de sesiones, registro y login básico).
+- **Modelo `User` actualizado con los campos `phone`, `address` y `role`** (sin necesidad de una nueva tabla).
+- **El campo `role` se asigna automáticamente como `guest` a nuevos usuarios**, y existe un usuario `admin`.
+- **Ruta protegida `/users` que solo permite acceso a administradores**.
+- **Autenticación mediante Laravel Sanctum**: permite generar tokens y autenticarse vía API.
+- **Registro mediante Laravel Breeze**, permitiendo registrar usuarios con los nuevos campos.
+- **Ruta `/login` que devuelve un token JWT usando Sanctum**.
+- **Ruta `/user` protegida con Sanctum para validar autenticación con tokens**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### **Lo que falta por hacer**
+- **Validación y almacenamiento de los nuevos campos (`phone` y `address`) en el formulario de registro**.
+- **Implementar `Passport` como alternativa a `Sanctum`, en caso de que se prefiera OAuth2 en lugar de tokens personales**.
+- **Agregar un endpoint `/logout` para revocar tokens generados en el login**.
+- **Mejorar la gestión de roles en el middleware, para permitir una administración más flexible de accesos**.
+- **Pruebas unitarias y de integración para verificar el flujo completo de autenticación**.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## **Requisitos Previos**
+Antes de comenzar, asegúrate de tener instalado:
+- **PHP 8.3 o superior**
+- **Composer**
+- **MySQL** (Se utilizó **XAMPP** con MySQL, pero puedes usar otro sistema compatible)
+- **Node.js y NPM** (para manejar Breeze y Vite si es necesario)
+- **Postman o `curl`** (para probar la API)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## **Instalación y Configuración**
+### 1️⃣ **Clonar el repositorio**
+```sh
+git clone <URL_DEL_REPOSITORIO>
+cd <NOMBRE_DEL_PROYECTO>
+2️⃣ Instalar dependencias
+sh
+Copiar
+Editar
+composer install
+npm install
+3️⃣ Configurar la Base de Datos
+En los archivos del proyecto se encuentra un script SQL que se debe ejecutar en MySQL antes de iniciar la aplicación. Puedes importarlo en phpMyAdmin o ejecutarlo manualmente en la terminal de MySQL.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Si prefieres configurarlo manualmente, sigue estos pasos:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Copia el archivo .env.example y renómbralo a .env:
+sh
+Copiar
+Editar
+cp .env.example .env
+Edita el .env y configura la base de datos:
+env
+Copiar
+Editar
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel_db
+DB_USERNAME=root
+DB_PASSWORD=
+4️⃣ Generar la clave de la aplicación
+sh
+Copiar
+Editar
+php artisan key:generate
+5️⃣ Ejecutar migraciones y seeders
+sh
+Copiar
+Editar
+php artisan migrate --seed
+Esto creará las tablas necesarias y un usuario de prueba.
 
-## Laravel Sponsors
+6️⃣ Iniciar el servidor
+sh
+Copiar
+Editar
+php artisan serve
+La aplicación estará disponible en http://127.0.0.1:8000
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Uso de la API
+1️⃣ Hacer Login y Obtener un Token
+POST http://127.0.0.1:8000/login
 
-### Premium Partners
+json
+Copiar
+Editar
+{
+    "email": "admin@example.com",
+    "password": "admin123"
+}
+Respuesta esperada:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+json
+Copiar
+Editar
+{
+    "token": "1|abcde12345...",
+    "user": {
+        "id": 1,
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "role": "admin"
+    }
+}
+Nota: Guarda el token porque lo usaremos en el siguiente paso.
 
-## Contributing
+2️⃣ Acceder a una Ruta Protegida con Token
+GET http://127.0.0.1:8000/user Headers:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+json
+Copiar
+Editar
+{
+    "Authorization": "Bearer TU_TOKEN_AQUI"
+}
+Si el token es válido, recibirás una respuesta con los datos del usuario autenticado.
 
-## Code of Conduct
+3️⃣ Acceder a la Lista de Usuarios (Solo Administradores)
+GET http://127.0.0.1:8000/users Headers:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+json
+Copiar
+Editar
+{
+    "Authorization": "Bearer TU_TOKEN_AQUI"
+}
+Si el usuario tiene el rol admin, verá la lista de usuarios. Si no, recibirá un error 403 Forbidden

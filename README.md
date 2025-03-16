@@ -2,8 +2,7 @@
 
 Este proyecto implementa autenticación con **Laravel Breeze** y **Laravel Sanctum**, permitiendo la gestión de usuarios con roles (`admin` y `guest`) y la generación de tokens para autenticación API. Se han agregado dos nuevos campos al modelo `User`: `phone` y `address`.
 
-## **Estado del Proyecto**
-### **Lo que ya está implementado**
+
 - **Autenticación con Laravel Breeze** (manejo de sesiones, registro y login básico).
 - **Modelo `User` actualizado con los campos `phone`, `address` y `role`** (sin necesidad de una nueva tabla).
 - **El campo `role` se asigna automáticamente como `guest` a nuevos usuarios**, y existe un usuario `admin`.
@@ -13,17 +12,10 @@ Este proyecto implementa autenticación con **Laravel Breeze** y **Laravel Sanct
 - **Ruta `/login` que devuelve un token JWT usando Sanctum**.
 - **Ruta `/user` protegida con Sanctum para validar autenticación con tokens**.
 
-### **Lo que falta por hacer**
-- **Validación y almacenamiento de los nuevos campos (`phone` y `address`) en el formulario de registro**.
-- **Implementar `Passport` como alternativa a `Sanctum`, en caso de que se prefiera OAuth2 en lugar de tokens personales**.
-- **Agregar un endpoint `/logout` para revocar tokens generados en el login**.
-- **Mejorar la gestión de roles en el middleware, para permitir una administración más flexible de accesos**.
-- **Pruebas unitarias y de integración para verificar el flujo completo de autenticación**.
 
----
 
 ## **Requisitos Previos**
-Antes de comenzar, asegúrate de tener instalado:
+Antes de comenzar, Instala:
 - **PHP 8.3 o superior**
 - **Composer**
 - **MySQL** (Se utilizó **XAMPP** con MySQL, pero puedes usar otro sistema compatible)

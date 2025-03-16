@@ -67,5 +67,12 @@ Route::prefix('api')->middleware('api')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [\App\Http\Controllers\API\AuthController::class, 'logout']); // Logout
 
+        // Protected Route - Only accessible with token
+        Route::get('/auth-check', function () {
+            return response()->json([
+                'message' => 'Accediste a la ruta protegida con Token',
+                'user' => auth()->user(),
+            ]);
+        });
     });
 });
